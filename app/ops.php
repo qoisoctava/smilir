@@ -752,6 +752,7 @@ function procRunPassthrough(array $cmd): int
     }
     stream_set_blocking($pipes[1], false);
     stream_set_blocking($pipes[2], false);
+    $exit = null;
     while (true) {
         $o = (string) stream_get_contents($pipes[1]);
         $e = (string) stream_get_contents($pipes[2]);
@@ -763,13 +764,18 @@ function procRunPassthrough(array $cmd): int
         }
         $st = proc_get_status($proc);
         if (!$st['running']) {
+            $exit = (int) ($st['exitcode'] ?? -1);
             break;
         }
         usleep(50000);
     }
     fclose($pipes[1]);
     fclose($pipes[2]);
-    return proc_close($proc);
+    $rc = proc_close($proc);
+    // PHP < 8.3 returns -1 from proc_close() once proc_get_status() has
+    // cached the exit code (bugs.php.net #75272). The status call above is
+    // authoritative, so prefer it: pip succeeding used to print "exited -1".
+    return Env::settleExit($rc, $exit);
 }
 
 

@@ -95,6 +95,22 @@ final class Env
         return 'php';
     }
 
+    /**
+     * Reconcile the exit code of a spawned child.
+     *
+     * PHP < 8.3 makes proc_close() return -1 as soon as proc_get_status()
+     * cached the exit code (bugs.php.net #75272), which made a successful
+     * `pip install` print "pip exited with -1" and skip the post-install
+     * inventory refresh. The status array holds the real code.
+     */
+    public static function settleExit(int $rc, ?int $statusExit): int
+    {
+        if ($rc < 0 && $statusExit !== null && $statusExit >= 0) {
+            return $statusExit;
+        }
+        return $rc;
+    }
+
     /** True for an executable that is php/lsphp/php<N>, never php-fpm/php-cgi. */
     private static function usableBinary(string $path): bool
     {

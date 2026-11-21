@@ -267,13 +267,17 @@ function run_ops_sync(array $args, int $timeout = 90): array
     stream_set_blocking($pipes[2], false);
     $out = '';
     $deadline = microtime(true) + $timeout;
+    $exit = null;
+    $timedOut = false;
     while (true) {
         $out .= (string) stream_get_contents($pipes[1]) . (string) stream_get_contents($pipes[2]);
         $st = proc_get_status($proc);
         if (!$st['running']) {
+            $exit = (int) ($st['exitcode'] ?? -1);
             break;
         }
         if (microtime(true) > $deadline) {
+            $timedOut = true;
             @proc_terminate($proc, 9);
             $out .= "\n[pipnix] timed out after {$timeout}s";
             break;
@@ -284,6 +288,13 @@ function run_ops_sync(array $args, int $timeout = 90): array
     fclose($pipes[1]);
     fclose($pipes[2]);
     $rc = proc_close($proc);
+    // PHP < 8.3: proc_close() returns -1 once proc_get_status() cached the
+    // exit code (bugs.php.net #75272). Keep the real code, so web actions do
+    // not report "failed" for a child that succeeded.
+    $rc = Env::settleExit($rc, $exit);
+    if ($timedOut) {
+        $rc = 124;
+    }
     return [$rc, $out];
 }
 
