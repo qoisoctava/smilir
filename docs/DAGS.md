@@ -82,7 +82,11 @@ Rules of thumb:
   functions. Importing heavy libraries at module top level is fine; doing
   `requests.get(...)` at top level is not.
 - The module must be importable in the DAG's venv: put code in `jobs/`
-  (repo root is on `PYTHONPATH`) or install it into that venv.
+  (repo root is on `PYTHONPATH`) or install it into that venv. For a project
+  directory use an editable install (`php app/ops.php venv:install
+  --name=<env> -e /path/to/project`) — a plain copy install moves the package
+  into `site-packages`, so paths resolved from `__file__` (`.env`, `sql/`,
+  templates) no longer point at the project. See GUIDE §7.
 
 ## The `command` contract
 

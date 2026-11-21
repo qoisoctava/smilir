@@ -244,6 +244,78 @@ dan hanya bisa lewat CLI/`requirements.txt`, bukan form Install di UI.
 Unregister environment ditolak jika masih dipakai DAG/task. Unregister tidak
 menghapus virtualenv dari disk.
 
+### Install paket lokal
+
+`venv:install` meneruskan argumennya apa adanya ke `pip install` dengan
+interpreter venv, jadi semua bentuk sumber pip bisa dipakai:
+
+```bash
+# direktori proyek, editable (kode dibaca langsung dari folder)
+php app/ops.php venv:install --name=main -e /home/USER/projects/pipeline
+
+# direktori proyek, disalin ke site-packages
+php app/ops.php venv:install --name=main /home/USER/projects/pipeline
+
+# file wheel / sdist
+php app/ops.php venv:install --name=main /home/USER/wheels/pipeline-0.1.0-py3-none-any.whl
+
+# requirements lokal (boleh berisi baris "-e /path")
+php app/ops.php venv:requirements --name=main \
+    --file=/home/USER/projects/pipeline/requirements.txt
+```
+
+Untuk proyek yang membaca file di samping paketnya (`.env`, `sql/`, template),
+pakai `-e`: lokasi paket tetap di folder proyek, sehingga path yang dihitung
+dari `__file__` tidak berpindah ke `site-packages`.
+
+Wheel untuk server bisa dibangun di mesin lokal (tidak perlu compiler di
+hosting), lalu di-upload:
+
+```bash
+python3 -m pip wheel . --no-deps -w dist          # hasil: dist/*.whl
+```
+
+```bash
+~/venvs/main/bin/python -c "import pipeline; print(pipeline.__file__)"
+```
+
+Prasyarat install editable: `setuptools` (tambah `wheel` bila build isolasi
+dimatikan). Pasang sekali per environment:
+
+```bash
+php app/ops.php venv:install --name=main 'pip>=24' setuptools wheel
+```
+
+Form **Install** di UI hanya menerima satu spec PyPI (`nama`, `nama==1.2.3`);
+path lokal, `-e`, dan URL harus lewat terminal atau `requirements.txt`.
+
+**Flag panjang `--…` bukan milik pip.** Parser `ops.php` menangkap setiap
+argumen berawalan `--` sebagai option pipnix, jadi `--no-build-isolation`,
+`--upgrade`, `--force-reinstall`, `--no-index` tidak sampai ke pip. Gunakan
+bentuk pendek (`-e`, `-U`, `-r`) atau panggil pip venv langsung:
+
+```bash
+~/venvs/main/bin/python -m pip install --no-build-isolation -e /home/USER/projects/pipeline
+~/venvs/main/bin/python -m pip install --no-index --find-links=/home/USER/wheels requests
+```
+
+**Tanpa pip.** Setiap task sudah mendapat `~/pipnix`, `lib/`, `dags/`, dan
+`jobs/` di `PYTHONPATH`, jadi menaruh paket di salah satu folder itu (atau
+symlink ke sana) cukup untuk membuatnya bisa di-import:
+
+```bash
+ln -sfn /home/USER/projects/pipeline/pipeline ~/pipnix/pipeline
+```
+
+`Path(__file__).resolve()` mengikuti symlink, sehingga paket tetap membaca
+`.env`/`sql/` dari folder proyek aslinya.
+
+**`pip exited with -1`.** Pada PHP < 8.3, `proc_close()` mengembalikan `-1`
+setelah `proc_get_status()` dipanggil (PHP bug #75272), walaupun pip sukses.
+Pipnix memakai exit code dari `proc_get_status()`, jadi pesan ini hanya muncul
+di build lama. Patokan keberhasilan tetap baris `Successfully installed …`
+atau inventory dari `venv:list --name=…`.
+
 ## 8. Settings, alert dan retensi
 
 **Admin → Settings** mengatur global task defaults (retries, retry delay,

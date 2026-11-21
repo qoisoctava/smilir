@@ -92,7 +92,16 @@ cPanel → **Setup Python App**:
 
 `lib/dag_loader.py` and `lib/runner.py` are stdlib-only — there is nothing to
 `pip install` for pipnix itself. Install only your own job dependencies from
-the Python page (or `php app/ops.php venv:install ...`).
+the Python page (or `php app/ops.php venv:install ...`). For a project that
+lives on the server, use an editable install so its `.env`/`sql/` paths keep
+resolving to the project directory:
+
+```bash
+php app/ops.php venv:install --name=main -e /home/USER/projects/pipeline
+```
+
+See GUIDE §7 ("Install paket lokal") for local wheels, requirements files and
+pip flags that the console form does not accept.
 
 ## Step 6 — The cron line
 
