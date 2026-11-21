@@ -224,12 +224,22 @@ install/uninstall paket, upgrade paket outdated, dan upload `requirements.txt`.
 Install/upgrade berjalan di background; output tersedia di pip log.
 
 ```bash
-php app/ops.php venv:list
+php app/ops.php venv:list                       # daftar env terdaftar
+php app/ops.php venv:list --name=main           # paket di satu env
 php app/ops.php venv:check --name=main
+php app/ops.php venv:create --name=main --path=/home/USER/venvs/main \
+    --python=/opt/alt/python311/bin/python3
+php app/ops.php venv:register --name=main --path=/home/USER/venvs/main
 php app/ops.php venv:install --name=main requests==2.32.3
 php app/ops.php venv:upgrade --name=main
 php app/ops.php venv:uninstall --name=main requests
 ```
+
+`venv:create` menolak direktori yang sudah berisi; kalau venv-nya sudah ada di
+disk (misalnya dibuat manual dengan `python3.11 -m venv`), pakai
+`venv:register` — perintah ini sama dengan tombol **Register** di halaman
+Python. Batasan versi gabungan seperti `pymysql>=1.1,<2` harus dikutip di shell
+dan hanya bisa lewat CLI/`requirements.txt`, bukan form Install di UI.
 
 Unregister environment ditolak jika masih dipakai DAG/task. Unregister tidak
 menghapus virtualenv dari disk.

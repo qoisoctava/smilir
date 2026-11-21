@@ -17,6 +17,7 @@
  *   php app/ops.php venv:upgrade --name=NAME
  *   php app/ops.php venv:requirements --name=NAME --file=requirements.txt
  *   php app/ops.php venv:create --name=NAME --path=/path/to/venv [--python=python3]
+ *   php app/ops.php venv:register --name=NAME --path=/path/to/existing/venv
  *   php app/ops.php venv:delete --name=NAME
  *   php app/ops.php update:check
  *   php app/ops.php update:apply [--archive=FILE]
@@ -92,6 +93,8 @@ function dispatch(string $cmd, array $opts, array $pos): int
             return cmdVenvRequirements($opts);
         case 'venv:create':
             return cmdVenvCreate($opts);
+        case 'venv:register':
+            return cmdVenvRegister($opts);
         case 'venv:delete':
             return cmdVenvDelete($opts);
         case 'update:check':
@@ -123,12 +126,14 @@ pipnix ops
   logs --run=<task_run_id> [--tail=100]
   tick                              run one scheduler tick
   venv:check [--name=NAME]          refresh interpreter + package inventory
-  venv:list [--name=NAME]           installed packages from the DB
+  venv:list [--name=NAME]           registered venvs, or one venv's packages
   venv:install --name=NAME pkg[==ver] ...
   venv:uninstall --name=NAME pkg
   venv:upgrade --name=NAME          pip install --upgrade for outdated packages
   venv:requirements --name=NAME --file=FILE
   venv:create --name=NAME --path=DIR [--python=BIN]
+  venv:register --name=NAME --path=DIR [--default]
+                                    register a venv that already exists
   venv:delete --name=NAME           remove the registration (files stay)
   update:check                      compare with GitHub (release or branch)
   update:apply [--archive=FILE]     download + apply + migrate + backup
@@ -377,6 +382,27 @@ function cmdVenvCheck(array $opts): int
 function cmdVenvList(array $opts): int
 {
     $name = (string) ($opts['name'] ?? '');
+    if ($name === '') {
+        $venvs = Db::all('SELECT * FROM pn_venv ORDER BY is_default DESC, name');
+        if ($venvs === []) {
+            echo "no venvs registered — create one:\n"
+                . "  php app/ops.php venv:create --name=NAME --path=DIR --python=/opt/alt/python311/bin/python3\n"
+                . "or register an existing one:\n"
+                . "  php app/ops.php venv:register --name=NAME --path=DIR\n";
+            return 0;
+        }
+        table(['NAME', 'PATH', 'DEFAULT', 'STATUS', 'PYTHON'], array_map(
+            static fn (array $v): array => [
+                (string) $v['name'],
+                (string) $v['path'],
+                ((int) $v['is_default'] === 1) ? 'yes' : '',
+                (string) $v['status'],
+                (string) ($v['python_version'] ?? '—'),
+            ],
+            $venvs
+        ));
+        return 0;
+    }
     $venv = Db::one('SELECT * FROM pn_venv WHERE name = ?', [$name]);
     if (!$venv) {
         fwrite(STDERR, "unknown venv '{$name}'\n");
@@ -556,6 +582,50 @@ function cmdVenvCreate(array $opts): int
         [$name, $path, $hasDefault === 0 ? 1 : 0, 'healthy', Env::now(), Env::now()]
     );
     echo "venv: {$name} → {$path}" . ($hasDefault === 0 ? ' (default)' : '') . "\n";
+    cmdVenvCheck(['name' => $name]);
+    return 0;
+}
+
+/**
+ * Register a virtualenv that already exists on disk (the web console calls
+ * this "register"; the CLI only had venv:create, which refuses non-empty dirs).
+ */
+function cmdVenvRegister(array $opts): int
+{
+    $name = (string) ($opts['name'] ?? '');
+    $path = rtrim((string) ($opts['path'] ?? ''), '/');
+    if (!preg_match('/^[a-z0-9][a-z0-9_-]{1,31}$/', $name)) {
+        fwrite(STDERR, "usage: venv:register --name=NAME --path=DIR [--default]\n");
+        return 64;
+    }
+    if ($path === '' || $path[0] !== '/' || str_contains($path, '..') || $path === '/') {
+        fwrite(STDERR, "path must be an absolute directory\n");
+        return 64;
+    }
+    if (Db::one('SELECT id FROM pn_venv WHERE name = ?', [$name])) {
+        fwrite(STDERR, "venv '{$name}' is already registered\n");
+        return 1;
+    }
+    if (!is_file($path . '/bin/python') && !is_file($path . '/bin/python3')) {
+        fwrite(STDERR, "no interpreter at {$path}/bin — is that a virtualenv?\n"
+            . "  create one first: php app/ops.php venv:create --name={$name} "
+            . "--path={$path} --python=/opt/alt/python311/bin/python3\n");
+        return 1;
+    }
+
+    $isDefault = !empty($opts['default']);
+    if (!$isDefault) {
+        $isDefault = (int) (Db::one('SELECT COUNT(*) AS n FROM pn_venv WHERE is_default = 1')['n'] ?? 0) === 0;
+    }
+    if ($isDefault) {
+        Db::run('UPDATE pn_venv SET is_default = 0');
+    }
+    Db::run(
+        'INSERT INTO pn_venv (name, path, is_default, status, created_at, updated_at)
+         VALUES (?,?,?,?,?,?)',
+        [$name, $path, $isDefault ? 1 : 0, 'healthy', Env::now(), Env::now()]
+    );
+    echo "venv: {$name} → {$path}" . ($isDefault ? ' (default)' : '') . "\n";
     cmdVenvCheck(['name' => $name]);
     return 0;
 }
