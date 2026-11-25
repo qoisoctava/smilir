@@ -1,11 +1,11 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/logo-white.png">
-    <img src="docs/logo-mono.png" alt="pipnix mark — a letter P whose bowl becomes a phoenix wing, with a pipeline node" width="88">
+    <img src="docs/logo-mono.png" alt="smilir mark — a single S-shaped gust of air, tapering at both ends" width="88">
   </picture>
 </p>
 
-<h1 align="center">pipnix</h1>
+<h1 align="center">smilir</h1>
 
 <p align="center">
   <em>Less Complexity. More Efficiency.</em><br>
@@ -23,14 +23,14 @@
 </p>
 
 <p align="center">
-  <img src="docs/screens/dashboard.png" alt="pipnix dashboard" width="840">
+  <img src="docs/screens/dashboard.png" alt="smilir dashboard" width="840">
 </p>
 
 ---
 
 ## Table of Contents
 
-- [Why pipnix?](#why-pipnix)
+- [Why smilir?](#why-smilir)
 - [Architecture Overview](#architecture-overview)
 - [Quick Start](#quick-start)
 - [Run with Docker](#run-with-docker)
@@ -46,9 +46,9 @@
 
 ---
 
-## Why pipnix?
+## Why smilir?
 
-Most schedulers assume a dedicated server. **pipnix assumes a $5 shared hosting plan**: PHP, MySQL, and one cron line. It keeps the useful 20% of Airflow — DAGs, dependencies, retries, timeouts, run history, logs — and drops the rest.
+Most schedulers assume a dedicated server. **smilir assumes a $5 shared hosting plan**: PHP, MySQL, and one cron line. It keeps the useful 20% of Airflow — DAGs, dependencies, retries, timeouts, run history, logs — and drops the rest.
 
 | Feature | Description |
 |---------|-------------|
@@ -130,7 +130,7 @@ make docker-down      # stop, keep data
 
 ## Deploy to cPanel
 
-pipnix ships as one release zip and runs on plain shared hosting — no root, no workers, no Node build:
+smilir ships as one release zip and runs on plain shared hosting — no root, no workers, no Node build:
 
 ```bash
 make dist                                        # dist/pipnix-v1.0.0.zip
@@ -275,7 +275,8 @@ lib/                  dag_loader.py + runner.py (stdlib only)
 public/               web console (index.php + views/ + assets/)
 dags/ · jobs/         DAG definitions and task code
 tests/                unit tests (php/) + e2e harness
-docs/                 GUIDE.md, DEPLOY.md, DAGS.md, DOCKER.md, UPDATE.md, assets/screenshots
+docs/                 GUIDE.md, DEPLOY.md, DAGS.md, DOCKER.md, UPDATE.md
+docs/brand/           brand SVGs + palette (source of truth for the mark)
 dags/examples/        copy-paste DAG patterns (not auto-loaded)
 docker/ · docker-compose.yml   single-container + MySQL deployment
 schema.sql · Makefile · README.md

@@ -1,4 +1,4 @@
-# Updating pipnix
+# Updating smilir
 
 The console can update itself from GitHub: **Admin → Updates**.
 

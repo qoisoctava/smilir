@@ -1,4 +1,4 @@
-# Panduan Lengkap pipnix
+# Panduan Lengkap smilir
 
 Panduan ini membawa Anda dari instalasi pertama sampai operasi dan pembaruan.
 Pilih cara menjalankan yang sesuai:
@@ -19,7 +19,7 @@ atau [Panduan Update](/docs/updates) untuk detail khusus.
 - cPanel: cron setiap menit. Docker: supercronic sudah ada di image.
 - Akses HTTPS ke GitHub hanya diperlukan untuk pemeriksaan/update dari GitHub.
 
-pipnix tidak memerlukan Composer, Node, Redis, broker, atau paket Python untuk
+smilir tidak memerlukan Composer, Node, Redis, broker, atau paket Python untuk
 runner-nya. `lib/dag_loader.py` dan `lib/runner.py` hanya memakai standard
 library Python.
 
@@ -28,7 +28,7 @@ library Python.
 ### cPanel
 
 1. Buat database dan user MySQL dari cPanel; beri user **ALL PRIVILEGES**.
-2. Upload dan ekstrak paket pipnix ke `~/pipnix/`. Jangan taruh `app/`, DAG,
+2. Upload dan ekstrak paket smilir ke `~/pipnix/`. Jangan taruh `app/`, DAG,
    jobs, logs, atau konfigurasi di webroot.
 3. Salin hanya isi `~/pipnix/public/` ke `~/public_html/pipnix/`.
 4. Pilih PHP 8.1+ di MultiPHP Manager.
@@ -290,7 +290,7 @@ Form **Install** di UI hanya menerima satu spec PyPI (`nama`, `nama==1.2.3`);
 path lokal, `-e`, dan URL harus lewat terminal atau `requirements.txt`.
 
 **Flag panjang `--…` bukan milik pip.** Parser `ops.php` menangkap setiap
-argumen berawalan `--` sebagai option pipnix, jadi `--no-build-isolation`,
+argumen berawalan `--` sebagai option smilir, jadi `--no-build-isolation`,
 `--upgrade`, `--force-reinstall`, `--no-index` tidak sampai ke pip. Gunakan
 bentuk pendek (`-e`, `-U`, `-r`) atau panggil pip venv langsung:
 
@@ -312,7 +312,7 @@ ln -sfn /home/USER/projects/pipeline/pipeline ~/pipnix/pipeline
 
 **`pip exited with -1`.** Pada PHP < 8.3, `proc_close()` mengembalikan `-1`
 setelah `proc_get_status()` dipanggil (PHP bug #75272), walaupun pip sukses.
-Pipnix memakai exit code dari `proc_get_status()`, jadi pesan ini hanya muncul
+Smilir memakai exit code dari `proc_get_status()`, jadi pesan ini hanya muncul
 di build lama. Patokan keberhasilan tetap baris `Successfully installed …`
 atau inventory dari `venv:list --name=…`.
 
@@ -384,7 +384,7 @@ rollback, permission, dan GitHub.
   env Python, install paket): domain memakai PHP-FPM atau LiteSpeed sehingga
   `PHP_BINARY` menunjuk `php-fpm`/`lsphp`. Set
   `'php_bin' => '/opt/cpanel/ea-php82/root/usr/bin/php'` di `app/config.php`
-  (pipnix memeriksa kandidat dan hanya menerima PHP >= 8.1).
+  (smilir memeriksa kandidat dan hanya menerima PHP >= 8.1).
 - Log pip berisi `Unsupported declare 'strict_types'` atau `parse error,
   unexpected '?'`: proses yang di-spawn adalah PHP 5.x (`lsphp` lama) — sama
   seperti kasus di atas, arahkan `php_bin` ke PHP 8.x.

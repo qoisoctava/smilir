@@ -1,7 +1,7 @@
-# Writing DAGs for pipnix
+# Writing DAGs for smilir
 
-A pipnix DAG is one Python file in `dags/` that exposes a single `DAG` dict.
-No `pip import pipnix`, no framework classes — the file is plain Python and
+A smilir DAG is one Python file in `dags/` that exposes a single `DAG` dict.
+No `pip import smilir`, no framework classes — the file is plain Python and
 the loader only reads the dict.
 
 ```python

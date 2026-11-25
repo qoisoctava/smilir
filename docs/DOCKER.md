@@ -1,6 +1,6 @@
-# Running pipnix with Docker
+# Running smilir with Docker
 
-pipnix is a plain PHP + MySQL + Python application, so a container is just a
+smilir is a plain PHP + MySQL + Python application, so a container is just a
 different host: the same code, the same `dags/` modules, the same console. One
 container carries the web server and the scheduler; a second runs MySQL.
 
