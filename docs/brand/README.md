@@ -45,3 +45,7 @@ The display name lives in two places: `PN_BRAND` in `app/bootstrap.php`
 reads it through `brand_name()` / `brand_logo()` / `brand_icon()` /
 `brand_tagline()` in `public/lib.php`. Replace the SVGs above, re-render the
 PNGs, and update those two values — no search-and-replace in views.
+
+What may and may not be renamed (paths, `pn_`, `PN_*`, `PIPNIX_*`, cookie,
+lock, Docker volumes, updater repo) and the staged runbook for those live in
+[`../BRAND.md`](../BRAND.md).

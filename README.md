@@ -276,6 +276,7 @@ public/               web console (index.php + views/ + assets/)
 dags/ · jobs/         DAG definitions and task code
 tests/                unit tests (php/) + e2e harness
 docs/                 GUIDE.md, DEPLOY.md, DAGS.md, DOCKER.md, UPDATE.md
+docs/BRAND.md         rename policy + staged repo/path/Docker runbook
 docs/brand/           brand SVGs + palette (source of truth for the mark)
 dags/examples/        copy-paste DAG patterns (not auto-loaded)
 docker/ · docker-compose.yml   single-container + MySQL deployment
