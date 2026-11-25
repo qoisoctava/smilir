@@ -1,4 +1,4 @@
-# pipnix web console
+# smilir web console
 Options -Indexes
 
 <IfModule mod_rewrite.c>

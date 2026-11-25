@@ -1,4 +1,4 @@
--- pipnix schema — MySQL 5.7+ / MariaDB 10.3+
+-- smilir schema — MySQL 5.7+ / MariaDB 10.3+
 -- Usage: mysql -u USER -p DBNAME < schema.sql
 SET NAMES utf8mb4;
 

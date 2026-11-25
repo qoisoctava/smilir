@@ -1,4 +1,4 @@
-"""Example pipnix task code — plain Python, no pipnix import needed.
+"""Example smilir task code — plain Python, no smilir import needed.
 
 Replace these functions with your own logic. Anything printed goes to the
 task log; a returned dict is stored in pn_task_run.result_json.

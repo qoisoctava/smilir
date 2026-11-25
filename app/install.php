@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 /**
- * pipnix installer — creates the schema and the first admin user.
+ * smilir installer — creates the schema and the first admin user.
  *
  *   php app/install.php --admin=you:secret [--venv=reporting:/home/USER/venvs/reporting]
  *
@@ -15,7 +15,7 @@ require __DIR__ . '/bootstrap.php';
 
 if (!Env::isCli()) {
     http_response_code(403);
-    exit('pipnix: CLI only');
+    exit(PN_BRAND . ': CLI only');
 }
 
 $admin = null;

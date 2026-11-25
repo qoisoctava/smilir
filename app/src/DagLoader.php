@@ -22,7 +22,7 @@ final class DagLoader
             if (!empty($res['ok'])) {
                 $out[] = $res['dag'];
             } else {
-                error_log('[pipnix] dag ' . basename($file) . ': ' . ($res['error'] ?? 'invalid'));
+                error_log('[' . PN_BRAND . '] dag ' . basename($file) . ': ' . ($res['error'] ?? 'invalid'));
             }
         }
         return $out;
@@ -384,7 +384,7 @@ final class DagLoader
                 if ((int) ($runs['n'] ?? 0) === 0) {
                     Db::run('DELETE FROM pn_task WHERE id = ?', [$row['id']]);
                 } else {
-                    error_log('[pipnix] task removed from source but kept (has history): '
+                    error_log('[' . PN_BRAND . '] task removed from source but kept (has history): '
                         . $row['name']);
                 }
             }

@@ -12,7 +12,7 @@ $appDir = getenv('PIPNIX_APP_DIR') ?: '/var/www/pipnix';
 $file = $appDir . '/app/config.php';
 
 if (is_file($file) && getenv('PIPNIX_FORCE_CONFIG') !== '1') {
-    fwrite(STDOUT, "[pipnix] config: keeping existing app/config.php\n");
+    fwrite(STDOUT, "[smilir] config: keeping existing app/config.php\n");
     exit(0);
 }
 
@@ -44,11 +44,14 @@ $config = [
     ],
     'alerts' => [
         'enabled' => $env('PIPNIX_ALERTS_ENABLED', '0') === '1',
-        'from'    => $env('PIPNIX_ALERTS_FROM', 'pipnix@example.com'),
+        'from'    => $env('PIPNIX_ALERTS_FROM', 'smilir@example.com'),
         'to'      => $to,
     ],
     'ui' => [
-        'title'     => $env('PIPNIX_UI_TITLE', 'pipnix'),
+        'title'     => $env('PIPNIX_UI_TITLE', 'smilir'),
+        'tagline'   => $env('PIPNIX_UI_TAGLINE', "Less Complexity.\nMore Efficiency."),
+        'logo'      => $env('PIPNIX_UI_LOGO', '/assets/logo-white.png'),
+        'icon'      => $env('PIPNIX_UI_ICON', '/assets/app-icon-32.png'),
         'base_path' => $env('PIPNIX_BASE_PATH', ''),
     ],
     'updater' => [
@@ -70,8 +73,8 @@ $php = "<?php\n"
     . 'return ' . var_export($config, true) . ";\n";
 
 if (@file_put_contents($file, $php) === false) {
-    fwrite(STDERR, "[pipnix] config: cannot write {$file}\n");
+    fwrite(STDERR, "[smilir] config: cannot write {$file}\n");
     exit(1);
 }
 @chmod($file, 0640);
-fwrite(STDOUT, "[pipnix] config: wrote {$file}\n");
+fwrite(STDOUT, "[smilir] config: wrote {$file}\n");

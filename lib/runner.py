@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""pipnix task runner — calls one `func` from a DAG task.
+"""smilir task runner — calls one `func` from a DAG task.
 
 Invoked by app/src/Runner.php as:
 
@@ -31,7 +31,7 @@ def resolve(dotted):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="pipnix task runner")
+    parser = argparse.ArgumentParser(description="smilir task runner")
     parser.add_argument("--func", required=True)
     parser.add_argument("--ds", required=True)
     parser.add_argument("--result")

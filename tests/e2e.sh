@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# pipnix end-to-end test.
+# smilir end-to-end test.
 #
 #   tests/e2e.sh            # runs against the dev MySQL, then drops the DB
 #   tests/e2e.sh --keep     # keeps pipnix_test for inspection
@@ -177,7 +177,7 @@ ok "pause/resume works"
 say "11. listing commands"
 php app/ops.php dags
 php app/ops.php runs --n=5
-php app/ops.php venv:list --name=e2e | head -5
+php app/ops.php venv:list --name=e2e | sed -n '1,5p'
 
 say "12. prune retention"
 php app/ops.php tick >/dev/null

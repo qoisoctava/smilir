@@ -21,11 +21,11 @@ final class Runner
             [$taskRunId]
         );
         if (!$tr) {
-            fwrite(STDERR, "pipnix runner: unknown task_run {$taskRunId}\n");
+            fwrite(STDERR, PN_BRAND . " runner: unknown task_run {$taskRunId}\n");
             return 66;
         }
         if (!in_array($tr['state'], ['queued', 'running'], true)) {
-            fwrite(STDERR, "pipnix runner: task_run {$taskRunId} is {$tr['state']}, skipping\n");
+            fwrite(STDERR, PN_BRAND . " runner: task_run {$taskRunId} is {$tr['state']}, skipping\n");
             return 0;
         }
 
@@ -40,7 +40,7 @@ final class Runner
             ['running', $logPath, Env::now(), Env::now(), $taskRunId]);
 
         Logger::line($logPath, sprintf(
-            'pipnix: start %s/%s attempt %d (runner=%s)',
+            PN_BRAND . ': start %s/%s attempt %d (runner=%s)',
             $tr['dag_name'], $tr['task_name'], $tr['attempt'], $tr['runner']
         ));
 
@@ -62,7 +62,7 @@ final class Runner
                 updated_at = ? WHERE id = ?',
             [$state, $exitCode, Env::now(), $error, Env::now(), $taskRunId]
         );
-        Logger::line($logPath, sprintf('pipnix: finished %s (exit %d)', $state, $exitCode));
+        Logger::line($logPath, sprintf(PN_BRAND . ': finished %s (exit %d)', $state, $exitCode));
 
         if ($state !== 'success') {
             $fresh = Db::one('SELECT * FROM pn_task_run WHERE id = ?', [$taskRunId]) ?? $tr;
@@ -79,7 +79,7 @@ final class Runner
         $resultFile = null;
 
         if (!empty($py['error'])) {
-            Logger::line($logPath, 'pipnix: ' . $py['error']
+            Logger::line($logPath, PN_BRAND . ': ' . $py['error']
                 . ' — check the venv path on the Python page, or pick another environment');
             return [127, false];
         }
@@ -137,7 +137,7 @@ final class Runner
         $desc = [1 => ['pipe', 'w'], 2 => ['pipe', 'w']];
         $proc = @proc_open($cmd, $desc, $pipes, PN_BASE, $env);
         if (!is_resource($proc)) {
-            Logger::line($logPath, 'pipnix: failed to start process');
+            Logger::line($logPath, PN_BRAND . ': failed to start process');
             return [127, false];
         }
         $fh = @fopen($logPath, 'ab');

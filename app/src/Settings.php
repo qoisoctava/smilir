@@ -66,7 +66,7 @@ final class Settings
     {
         return [
             'alerts.enabled'  => self::bool('alerts.enabled', (bool) Env::cfg('alerts.enabled', false)),
-            'alerts.from'     => (string) self::get('alerts.from', (string) Env::cfg('alerts.from', 'pipnix@localhost')),
+            'alerts.from'     => (string) self::get('alerts.from', (string) Env::cfg('alerts.from', 'smilir@localhost')),
             'alerts.to'       => (string) self::get('alerts.to', implode(', ', (array) Env::cfg('alerts.to', []))),
             'retention.days'  => self::int('retention.days', (int) Env::cfg('retention.days', 30)),
             'task.retries'    => self::int('task.retries', (int) Env::cfg('task_defaults.retries', 0)),

@@ -1,6 +1,6 @@
 <?php
 /**
- * pipnix configuration — copy to config.php and fill in.
+ * smilir configuration — copy to config.php and fill in.
  * config.php is git-ignored and never web-accessible.
  */
 declare(strict_types=1);
@@ -45,13 +45,19 @@ return [
 
     'alerts' => [
         'enabled' => false,
-        'from'    => 'pipnix@example.com',
+        'from'    => 'smilir@example.com',
         // Simple recipients list; per-DAG overrides live in the DAG file.
         'to'      => ['ops@example.com'],
     ],
 
+    // Brand layer. `title` is the product name shown in the UI, page titles
+    // and login screen; the defaults live in app/bootstrap.php (PN_BRAND).
     'ui' => [
-        'title' => 'pipnix',
+        'title'   => 'smilir',
+        'tagline' => "Less Complexity.\nMore Efficiency.",
+        'logo'    => '/assets/logo-white.png',
+        'icon'    => '/assets/app-icon-32.png',
+        // 'base_path' => '/pipnix',
     ],
 
     // Built-in updater — pulls source archives from GitHub. Set a read-only

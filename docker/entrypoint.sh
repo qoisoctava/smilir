@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# pipnix container entry point.
+# smilir container entry point.
 #
 # 1. wait for MySQL
 # 2. render app/config.php from PIPNIX_* environment variables
@@ -15,7 +15,7 @@ ADMIN_USER="${PIPNIX_ADMIN_USER:-admin}"
 ADMIN_PASS="${PIPNIX_ADMIN_PASS:-admin}"
 DB_WAIT="${PIPNIX_DB_WAIT:-90}"
 
-log() { printf '[pipnix] %s\n' "$*"; }
+log() { printf '[smilir] %s\n' "$*"; }
 
 cd "$APP_DIR"
 

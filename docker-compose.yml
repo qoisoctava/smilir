@@ -1,4 +1,4 @@
-# pipnix — single app container + MySQL.
+# smilir — single app container + MySQL.
 #
 #   cp .env.example .env      # pick secrets / port
 #   docker compose up -d --build

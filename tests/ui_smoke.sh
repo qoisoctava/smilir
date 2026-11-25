@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# pipnix web console smoke test.
+# smilir web console smoke test.
 #
 #   tests/ui_smoke.sh [--keep]
 #
@@ -122,6 +122,7 @@ ok "anonymous request redirects to login"
 
 LOGIN=$(get /login)
 grep -q "Welcome back" <<<"$LOGIN" || fail "login page missing form"
+grep -q "smilir" <<<"$LOGIN" || fail "login page is missing the brand name"
 TOKEN=$(sed -n 's/.*name="_csrf" value="\([a-f0-9]*\)".*/\1/p' <<<"$LOGIN" | head -1)
 [[ -n "$TOKEN" ]] || fail "no csrf token"
 BAD=$(curl -s -b "$JAR" -c "$JAR" -d "_csrf=$TOKEN&username=admin&password=wrong" "$BASE/login")
@@ -190,7 +191,7 @@ grep -q "Resolved command" <<<"$TASKPAGE" || fail "task page missing"
 ATTEMPT=$(get "/task/$TASK_ID/attempt/1")
 grep -q "Log" <<<"$ATTEMPT" || fail "attempt log page missing"
 DL=$(get "/logs/$TASK_ID/download")
-grep -q "pipnix:" <<<"$DL" || fail "log download missing"
+grep -q "smilir:" <<<"$DL" || fail "log download missing"
 ok "log viewer + task page + download"
 
 LOGIDX=$(get /logs)
@@ -208,7 +209,7 @@ grep -q "Writing DAGs\|DAG-level keys\|Task-level keys" <<<"$DOCS2" || fail "dag
 DOCS3=$(get /docs/docker)
 grep -q "Running with Docker\|docker compose up" <<<"$DOCS3" || fail "docker doc missing"
 DOCS4=$(get /docs/updates)
-grep -q "Updating pipnix\|update:apply" <<<"$DOCS4" || fail "updates doc missing"
+grep -q "Updating smilir\|update:apply" <<<"$DOCS4" || fail "updates doc missing"
 ok "bundled docs pages"
 
 PY=$(get /python)

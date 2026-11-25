@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 /**
- * pipnix ops — operator CLI (works before the web UI exists).
+ * smilir ops — operator CLI (works before the web UI exists).
  *
  *   php app/ops.php dags
  *   php app/ops.php runs [--dag=NAME] [--n=20]
@@ -29,7 +29,7 @@ require __DIR__ . '/bootstrap.php';
 
 if (!Env::isCli()) {
     http_response_code(403);
-    exit('pipnix: CLI only');
+    exit(PN_BRAND . ': CLI only');
 }
 
 $argvCopy = array_slice($argv, 1);
@@ -47,7 +47,7 @@ foreach (array_slice($argvCopy, 1) as $arg) {
 try {
     exit(dispatch($cmd, $opts, $pos));
 } catch (Throwable $e) {
-    fwrite(STDERR, "pipnix: " . $e->getMessage() . "\n");
+    fwrite(STDERR, PN_BRAND . ": " . $e->getMessage() . "\n");
     exit(1);
 }
 
@@ -113,8 +113,9 @@ function dispatch(string $cmd, array $opts, array $pos): int
 
 function helpText(): string
 {
+    $brand = PN_BRAND;
     return <<<TXT
-pipnix ops
+{$brand} ops
 
   dags                              list DAGs
   runs [--dag=NAME] [--n=20]        recent dag runs

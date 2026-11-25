@@ -4,8 +4,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title><?= e($title) ?> · pipnix</title>
-<link rel="icon" href="<?= url('/assets/app-icon-32.png') ?>">
+<title><?= e($title) ?> · <?= e(brand_name()) ?></title>
+<link rel="icon" href="<?= url(brand_icon()) ?>">
 <link rel="stylesheet" href="<?= url('/assets/app.css') ?>">
 </head>
 <body>

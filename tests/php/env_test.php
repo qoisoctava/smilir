@@ -35,6 +35,12 @@ check('actually runs as CLI', $out === 'cli-ok', $out);
 $version = trim((string) @shell_exec(escapeshellarg($bin) . ' -r ' . escapeshellarg('echo PHP_VERSION;') . ' 2>/dev/null'));
 check('resolved PHP is >= 8.1 (not a legacy lsphp)', version_compare($version, '8.1', '>='), $version);
 
+// Brand layer defaults + override (public/lib.php wraps the same lookup).
+check('brand default name is smilir', PN_BRAND === 'smilir', PN_BRAND);
+$GLOBALS['pn_config']['ui'] = ['title' => 'Acme'];
+check('ui.title overrides the brand', (string) Env::cfg('ui.title', PN_BRAND) === 'Acme');
+unset($GLOBALS['pn_config']['ui']);
+
 // The explicit override must win when it points at a real CLI binary.
 $GLOBALS['pn_config']['php_bin'] = $bin;
 check('config php_bin override is honoured', Env::phpCli() === $bin);

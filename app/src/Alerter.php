@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 /**
  * Minimal alerter: one email per failed task attempt (when enabled).
- * Kept deliberately small — pipnix v1 sends mail via PHP mail().
+ * Kept deliberately small — smilir v1 sends mail via PHP mail().
  */
 final class Alerter
 {
@@ -25,8 +25,8 @@ final class Alerter
             return;
         }
 
-        $from = (string) Settings::get('alerts.from', (string) Env::cfg('alerts.from', 'pipnix@localhost'));
-        $subject = sprintf('[pipnix] %s / %s failed', $dag['name'], $task['name']);
+        $from = (string) Settings::get('alerts.from', (string) Env::cfg('alerts.from', 'smilir@localhost'));
+        $subject = sprintf('[' . PN_BRAND . '] %s / %s failed', $dag['name'], $task['name']);
         $body    = "Dag:    {$dag['name']}\n"
                  . "Task:   {$task['name']}\n"
                  . "Run:    {$taskRun['run_id']}\n"

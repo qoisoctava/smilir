@@ -1,6 +1,6 @@
 <?php
 /**
- * pipnix web console — front controller.
+ * smilir web console — front controller.
  *
  * Dev:   php -S 127.0.0.1:8099 public/index.php
  * Prod:  copy public/* to public_html/pipnix/ (or point the docroot at public/)
@@ -778,7 +778,7 @@ function docs_page(string $slug): void
         'deploy'  => ['Deploying to cPanel', 'DEPLOY'],
         'dags'    => ['Writing DAGs', 'DAGS'],
         'docker'  => ['Running with Docker', 'DOCKER'],
-        'updates' => ['Updating pipnix', 'UPDATE'],
+        'updates' => ['Updating ' . PN_BRAND, 'UPDATE'],
     ];
     if (!isset($docs[$slug])) {
         http_response_code(404);

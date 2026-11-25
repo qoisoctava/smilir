@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 /**
- * pipnix runner — executes ONE task attempt.
+ * smilir runner — executes ONE task attempt.
  * Launched detached by the scheduler: php runner.php --run=<task_run_id>
  */
 declare(strict_types=1);
@@ -10,7 +10,7 @@ require __DIR__ . '/bootstrap.php';
 
 if (!Env::isCli()) {
     http_response_code(403);
-    exit('pipnix: CLI only');
+    exit(PN_BRAND . ': CLI only');
 }
 
 $id = 0;
@@ -27,7 +27,7 @@ if ($id <= 0) {
 try {
     exit(Runner::run($id));
 } catch (Throwable $e) {
-    fwrite(STDERR, '[pipnix] runner failed: ' . $e->getMessage() . "\n"
+    fwrite(STDERR, '[' . PN_BRAND . '] runner failed: ' . $e->getMessage() . "\n"
         . $e->getTraceAsString() . "\n");
     exit(1);
 }

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""pipnix DAG loader.
+"""smilir DAG loader.
 
 Executes a DAG module (dags/<name>.py) in a subprocess and prints the JSON
 contract consumed by app/src/DagLoader.php:

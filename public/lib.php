@@ -1,6 +1,6 @@
 <?php
 /**
- * pipnix web console — shared helpers.
+ * smilir web console — shared helpers.
  */
 declare(strict_types=1);
 
@@ -31,7 +31,7 @@ foreach ($appCandidates as $cand) {
 }
 if ($appDir === null) {
     http_response_code(500);
-    echo 'pipnix: cannot locate app/bootstrap.php.' . "\n\n"
+    echo 'smilir: cannot locate app/bootstrap.php.' . "\n\n"
         . "Checked:\n" . implode("\n", array_map('htmlspecialchars', $appCandidates)) . "\n\n"
         . 'Fix: upload the app so /home/USER/pipnix/app/bootstrap.php exists, or set the '
         . 'PIPNIX_APP environment variable to the absolute path of the app directory '
@@ -59,7 +59,7 @@ header('Referrer-Policy: same-origin');
 
 // Uncaught exception → branded 500 page; details go to the error log only.
 set_exception_handler(static function (Throwable $e): void {
-    error_log('[pipnix] uncaught ' . get_class($e) . ': ' . $e->getMessage()
+    error_log('[' . PN_BRAND . '] uncaught ' . get_class($e) . ': ' . $e->getMessage()
         . ' @ ' . $e->getFile() . ':' . $e->getLine());
     render_error_page(500, 'Something went wrong',
         'An unexpected error occurred. The details were written to the server log.');
@@ -70,7 +70,7 @@ register_shutdown_function(static function (): void {
     $err = error_get_last();
     if ($err !== null && in_array($err['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR], true)
         && !headers_sent()) {
-        error_log('[pipnix] fatal: ' . $err['message'] . ' @ ' . $err['file'] . ':' . $err['line']);
+        error_log('[' . PN_BRAND . '] fatal: ' . $err['message'] . ' @ ' . $err['file'] . ':' . $err['line']);
         http_response_code(500);
         render_error_page(500, 'Something went wrong',
             'An unexpected error occurred. The details were written to the server log.');
@@ -120,6 +120,31 @@ function url(string $path = '/'): string
 {
     $base = rtrim((string) Env::cfg('ui.base_path', ''), '/');
     return $base . '/' . ltrim($path, '/');
+}
+
+// ---------------------------------------------------------------- branding
+// Everything user-facing reads the name/logo from here, so a rebrand is a
+// config change rather than a search-and-replace. Defaults live in
+// app/bootstrap.php (PN_BRAND / PN_TAGLINE).
+
+function brand_name(): string
+{
+    return (string) Env::cfg('ui.title', PN_BRAND);
+}
+
+function brand_tagline(): string
+{
+    return (string) Env::cfg('ui.tagline', PN_TAGLINE);
+}
+
+function brand_logo(): string
+{
+    return (string) Env::cfg('ui.logo', '/assets/logo-white.png');
+}
+
+function brand_icon(): string
+{
+    return (string) Env::cfg('ui.icon', '/assets/app-icon-32.png');
 }
 
 function redirect(string $path): never
@@ -279,7 +304,7 @@ function run_ops_sync(array $args, int $timeout = 90): array
         if (microtime(true) > $deadline) {
             $timedOut = true;
             @proc_terminate($proc, 9);
-            $out .= "\n[pipnix] timed out after {$timeout}s";
+            $out .= "\n[" . PN_BRAND . "] timed out after {$timeout}s";
             break;
         }
         usleep(50000);

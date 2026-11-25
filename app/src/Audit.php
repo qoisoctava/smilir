@@ -16,7 +16,7 @@ final class Audit
             );
         } catch (Throwable $e) {
             // auditing must never break the action itself
-            error_log('[pipnix] audit write failed: ' . $e->getMessage());
+            error_log('[' . PN_BRAND . '] audit write failed: ' . $e->getMessage());
         }
     }
 

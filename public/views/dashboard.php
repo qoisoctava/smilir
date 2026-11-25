@@ -18,7 +18,7 @@ $mixRows = static function (array $mix, array $order): array {
 $slotPct = $slots['total'] > 0 ? min(100, (int) round($slots['used'] / $slots['total'] * 100)) : 0;
 ?>
 <header class="page-head">
-  <h1>pipnix</h1>
+  <h1><?= e(brand_name()) ?></h1>
 </header>
 
 <section class="block">

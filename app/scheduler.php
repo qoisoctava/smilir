@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 /**
- * pipnix tick — run this from cron every minute:
+ * smilir tick — run this from cron every minute:
  *   * * * * * /usr/local/bin/php /home/USER/pipnix/app/scheduler.php >> /home/USER/pipnix/logs/cron.log 2>&1
  */
 declare(strict_types=1);
@@ -10,14 +10,14 @@ require __DIR__ . '/bootstrap.php';
 
 if (!Env::isCli()) {
     http_response_code(403);
-    exit('pipnix: CLI only');
+    exit(PN_BRAND . ': CLI only');
 }
 
 try {
     Scheduler::tick();
     exit(0);
 } catch (Throwable $e) {
-    fwrite(STDERR, '[pipnix] tick failed: ' . $e->getMessage() . "\n"
+    fwrite(STDERR, '[' . PN_BRAND . '] tick failed: ' . $e->getMessage() . "\n"
         . $e->getTraceAsString() . "\n");
     exit(1);
 }

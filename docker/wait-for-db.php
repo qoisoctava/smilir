@@ -27,12 +27,12 @@ for (;;) {
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         ]);
         $pdo->query('SELECT 1');
-        fwrite(STDOUT, "[pipnix] database: ready ({$host}:{$port}/{$name})\n");
+        fwrite(STDOUT, "[smilir] database: ready ({$host}:{$port}/{$name})\n");
         exit(0);
     } catch (Throwable $e) {
         $last = $e->getMessage();
         if (microtime(true) >= $deadline) {
-            fwrite(STDERR, "[pipnix] database: not reachable after {$wait}s — {$last}\n");
+            fwrite(STDERR, "[smilir] database: not reachable after {$wait}s — {$last}\n");
             exit(1);
         }
         sleep(1);

@@ -544,7 +544,7 @@ final class Updater
     /** @return array{0:int,1:string,2:string} [http code, body, error] */
     private static function http(string $url, ?string $dest = null, int $maxBytes = 2097152): array
     {
-        $headers = ['User-Agent: pipnix-updater/' . PN_VERSION, 'Accept: application/vnd.github+json'];
+        $headers = ['User-Agent: ' . PN_BRAND . '-updater/' . PN_VERSION, 'Accept: application/vnd.github+json'];
         $token = trim((string) Env::cfg('updater.token', ''));
         if ($token !== '') {
             $headers[] = 'Authorization: Bearer ' . $token;

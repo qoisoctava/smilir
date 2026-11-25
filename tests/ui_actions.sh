@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# pipnix web console — Phase 6 action tests (editor, import, trigger,
+# smilir web console — Phase 6 action tests (editor, import, trigger,
 # pause/resume, clear/mark, venv check/install/uninstall, users, audit).
 #
 #   tests/ui_actions.sh [--keep]
@@ -241,9 +241,9 @@ TASK_HTML=$(curl -s -b "$JAR" "$BASE/task/$TR_ID")
 grep -q "Resolved command" <<<"$TASK_HTML" || fail "task page missing"
 grep -q "Attempts" <<<"$TASK_HTML" || fail "task attempts missing"
 ATTEMPT=$(curl -s -b "$JAR" "$BASE/task/$TR_ID/attempt/1")
-grep -q "pipnix: start" <<<"$ATTEMPT" || fail "attempt log page missing"
+grep -q "smilir: start" <<<"$ATTEMPT" || fail "attempt log page missing"
 DL_BODY=$(curl -s -b "$JAR" "$BASE/logs/$TR_ID/download")
-grep -q "pipnix: start" <<<"$DL_BODY" || fail "log download missing"
+grep -q "smilir: start" <<<"$DL_BODY" || fail "log download missing"
 
 PREV=$(curl -s -b "$JAR" --get --data-urlencode "schedule=0 3 * * *" "$BASE/dags/schedule-preview")
 grep -q '"human":"daily at 03:00"' <<<"$PREV" || fail "schedule preview human text missing"
@@ -254,7 +254,7 @@ ok "favorites, graph/gantt/code tabs, task page, downloads, schedule preview"
 
 say "11. settings apply to DAG defaults"
 post /admin/settings -d "_csrf=$TOKEN" \
-  -d "alerts_from=pipnix@example.com" -d "alerts_to=ops@example.com, oncall@example.com" \
+  -d "alerts_from=smilir@example.com" -d "alerts_to=ops@example.com, oncall@example.com" \
   -d "retention_days=45" -d "task_retries=2" -d "task_retry_delay=90" \
   -d "task_timeout=30" -d "task_email=1" \
   -d "updater_enabled=1" -d "updater_repo=qoisoctava/pipnix" \

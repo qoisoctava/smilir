@@ -1,6 +1,6 @@
 <?php
 /**
- * pipnix web console — write actions & management pages.
+ * smilir web console — write actions & management pages.
  * Included from index.php; every handler checks CSRF + role itself.
  */
 declare(strict_types=1);

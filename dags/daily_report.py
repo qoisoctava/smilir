@@ -1,10 +1,10 @@
-"""Example pipnix DAG — see DESIGN.md §6.
+"""Example smilir DAG — see DESIGN.md §6.
 
 A DAG is a Python module exposing one `DAG` dict. Tasks are either:
   - `func`:    dotted callable path, called as func(ds=...)
   - `command`: shell string, `{ds}` is replaced with the logical date
 
-No pipnix import is required.
+No smilir import is required.
 """
 
 DAG = {

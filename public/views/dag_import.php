@@ -5,7 +5,7 @@
   <div>
     <p class="muted small"><a class="link" href="<?= url('/dags') ?>">← Dags</a></p>
     <h1>Import Dag definition</h1>
-    <p class="muted small">Upload a Python DAG module — pipnix loads it in the default venv,
+    <p class="muted small">Upload a Python DAG module — <?= e(brand_name()) ?> loads it in the default venv,
       checks the cron and dependencies, then adds it to <span class="mono">dags/</span>.</p>
   </div>
 </header>

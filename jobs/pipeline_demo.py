@@ -1,6 +1,6 @@
 """Task code for the example DAGs in dags/examples/ — plain Python, stdlib only.
 
-pipnix never imports pipnix itself: the runner puts the repo root on
+smilir never imports smilir itself: the runner puts the repo root on
 PYTHONPATH, resolves the dotted `func` path, and calls the function with only
 the context kwargs it declares (ds, run_id, attempt, params, task, dag).
 

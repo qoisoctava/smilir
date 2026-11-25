@@ -15,15 +15,15 @@ $items = [
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title><?= e($title) ?> · pipnix</title>
-<link rel="icon" href="<?= url('/assets/app-icon-32.png') ?>">
+<title><?= e($title) ?> · <?= e(brand_name()) ?></title>
+<link rel="icon" href="<?= url(brand_icon()) ?>">
 <link rel="stylesheet" href="<?= url('/assets/app.css') ?>">
 </head>
 <body>
 <div class="app">
   <aside class="sidebar">
-    <a class="logo" href="<?= url('/') ?>" title="pipnix">
-      <img src="<?= url('/assets/logo-white.png') ?>" alt="pipnix">
+    <a class="logo" href="<?= url('/') ?>" title="<?= e(brand_name()) ?>">
+      <img src="<?= url(brand_logo()) ?>" alt="<?= e(brand_name()) ?>">
     </a>
     <nav class="nav">
       <?php foreach ($items as [$key, $href, $glyph, $label]): ?>

@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 #
-# pipnix in a single container: Apache + PHP (web console and CLI), Python 3
+# smilir in a single container: Apache + PHP (web console and CLI), Python 3
 # with venv support, and supercronic (the 1-minute scheduler tick).
 #
 #   docker build -f docker/Dockerfile -t pipnix .
@@ -40,7 +40,7 @@ RUN set -eux; \
     arch="$(dpkg --print-architecture)"; \
     case "$arch" in \
         amd64|arm64) : ;; \
-        *) echo "pipnix: unsupported architecture '$arch'" >&2; exit 1 ;; \
+        *) echo "smilir: unsupported architecture '$arch'" >&2; exit 1 ;; \
     esac; \
     curl -fsSL -o /usr/local/bin/supercronic \
         "https://github.com/aptible/supercronic/releases/download/${SUPERTRONIC_VERSION}/supercronic-linux-${arch}"; \

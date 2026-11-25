@@ -14,7 +14,7 @@ final class PasswordPolicy
 
     /** Passwords that must never survive past the first login. */
     private const COMMON = [
-        'admin', 'administrator', 'password', 'passw0rd', 'pipnix',
+        'admin', 'administrator', 'password', 'passw0rd', 'pipnix', 'smilir',
         '123456', '1234567', '12345678', '123456789', 'qwerty',
         'letmein', 'welcome', 'changeme', 'admin123', 'root',
     ];

@@ -1,4 +1,4 @@
-# pipnix scheduler — supercronic reads this file and runs it as www-data.
+# smilir scheduler — supercronic reads this file and runs it as www-data.
 # supercronic logs every tick to the container's stdout, so `docker compose
 # logs -f app` is the scheduler log.
 
