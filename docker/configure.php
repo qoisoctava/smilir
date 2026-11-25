@@ -56,7 +56,7 @@ $config = [
     ],
     'updater' => [
         'enabled'      => $env('PIPNIX_UPDATER_ENABLED', '1') === '1',
-        'repo'         => $env('PIPNIX_UPDATE_REPO', 'qoisoctava/pipnix'),
+        'repo'         => $env('PIPNIX_UPDATE_REPO', 'qoisoctava/smilir'),
         'channel'      => $env('PIPNIX_UPDATE_CHANNEL', 'branch'),
         'branch'       => $env('PIPNIX_UPDATE_BRANCH', 'main'),
         'token'        => $env('PIPNIX_UPDATE_TOKEN'),

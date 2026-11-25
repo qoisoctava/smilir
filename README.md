@@ -133,7 +133,8 @@ make docker-down      # stop, keep data
 smilir ships as one release zip and runs on plain shared hosting — no root, no workers, no Node build:
 
 ```bash
-make dist                                        # dist/pipnix-v1.0.0.zip
+make dist                                        # deployment: dist/pipnix-v1.0.0.zip
+make dist PREFIX=smilir                          # clean install: dist/smilir-v1.0.0.zip
 ```
 
 Then in cPanel:

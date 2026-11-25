@@ -21,6 +21,7 @@ around, set the `PIPNIX_APP` environment variable instead.
 ## Step 1 — Upload the release
 
 1. Build the release zip locally: `make dist` → `dist/pipnix-v<version>.zip`
+   (deployment profile; `make dist PREFIX=smilir` builds the clean-install archive)
    (only tracked files, no `app/config.php`).
 2. cPanel → **File Manager** → upload the zip to your home directory (`/home/USER/`).
 3. Extract it. You get `/home/USER/pipnix/`.

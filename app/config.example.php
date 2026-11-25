@@ -64,7 +64,7 @@ return [
     // token for a private fork; branch is "main" until releases are tagged.
     'updater' => [
         'enabled'      => true,
-        'repo'         => 'qoisoctava/pipnix',
+        'repo'         => 'qoisoctava/smilir',
         'channel'      => 'branch',   // or "release"
         'branch'       => 'main',
         'token'        => null,

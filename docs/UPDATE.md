@@ -23,7 +23,7 @@ Set the channel in **Admin → Settings → Updates**, or in `app/config.php`:
 ```php
 'updater' => [
     'enabled'      => true,
-    'repo'         => 'qoisoctava/pipnix',   // owner/name
+    'repo'         => 'qoisoctava/smilir',   // owner/name
     'channel'      => 'branch',              // or 'release'
     'branch'       => 'main',
     'token'        => null,                  // read-only token for private forks

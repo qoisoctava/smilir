@@ -888,7 +888,7 @@ function post_settings_save(): void
     $delay     = max(0, min(86400, (int) ($_POST['task_retry_delay'] ?? 300)));
     $timeout   = max(0, min(86400, (int) ($_POST['task_timeout'] ?? 0)));
 
-    $updaterRepo = trim((string) ($_POST['updater_repo'] ?? 'qoisoctava/pipnix'));
+    $updaterRepo = trim((string) ($_POST['updater_repo'] ?? 'qoisoctava/smilir'));
     if (!preg_match('#^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$#', $updaterRepo)) {
         flash('Update repository must look like owner/name.', 'bad');
         redirect('/admin/settings');

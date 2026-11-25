@@ -257,11 +257,11 @@ post /admin/settings -d "_csrf=$TOKEN" \
   -d "alerts_from=smilir@example.com" -d "alerts_to=ops@example.com, oncall@example.com" \
   -d "retention_days=45" -d "task_retries=2" -d "task_retry_delay=90" \
   -d "task_timeout=30" -d "task_email=1" \
-  -d "updater_enabled=1" -d "updater_repo=qoisoctava/pipnix" \
+  -d "updater_enabled=1" -d "updater_repo=qoisoctava/smilir" \
   -d "updater_channel=branch" -d "updater_branch=main" >/dev/null
 [[ "$(mysql -N -B -e "SELECT v FROM \`$DB\`.pn_setting WHERE k='task.retries';")" == "2" ]] || fail "task.retries not saved"
 [[ "$(mysql -N -B -e "SELECT v FROM \`$DB\`.pn_setting WHERE k='retention.days';")" == "45" ]] || fail "retention not saved"
-[[ "$(mysql -N -B -e "SELECT v FROM \`$DB\`.pn_setting WHERE k='updater.repo';")" == "qoisoctava/pipnix" ]] || fail "updater repo not saved"
+[[ "$(mysql -N -B -e "SELECT v FROM \`$DB\`.pn_setting WHERE k='updater.repo';")" == "qoisoctava/smilir" ]] || fail "updater repo not saved"
 [[ "$(mysql -N -B -e "SELECT COUNT(*) FROM \`$DB\`.pn_dag WHERE source_hash IS NOT NULL;")" == "0" ]] || fail "dag cache was not invalidated"
 
 cat > dags/def_flow.py <<'PY'

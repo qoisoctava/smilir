@@ -38,41 +38,74 @@ migration:
 | `PIPNIX_*` env names | existing `.env` files and Docker stacks |
 | session cookie `pipnix_sid` | renaming logs every user out |
 | install paths `~/pipnix`, docroot `.../pipnix`, `ui.base_path=/pipnix` | cron, `.htaccess`, docs, bookmarks |
-| updater repo `qoisoctava/pipnix`, `dist/pipnix-v*.zip` | self-update and release assets |
+| `dist/pipnix-v*.zip` | release asset name/extract folder for the deployment profile |
 | Docker project/image/volume names (`pipnix`, `pipnix_*`) | new project name = new empty volumes |
 | MySQL advisory lock `pipnix` | two names = two schedulers = double runs |
 | LICENSE copyright | MIT requires keeping the notice |
 
-## Stage 2 — repository and release
+## Two profiles: utama and deployment
 
-The repo is not published yet, so do this **before** pointing anyone at the
-updater.
+The remaining stages are split into two **install profiles** of the same code,
+not two forks or two branches:
 
-1. Confirm the tree is clean and `make check`, `make ui`, `make ui-actions`,
-   `make e2e` pass.
-2. Create the new repository and push (keep the old remote until the new one is
-   verified):
+| | **Utama** (clean install) | **Deployment** (this cPanel) |
+| --- | --- | --- |
+| Source | `qoisoctava/smilir`, `main` | same repo, same commits |
+| Archive | `make dist PREFIX=smilir` → `smilir-v*.zip` | `make dist` → `pipnix-v*.zip` |
+| Install dir | `~/smilir` | `~/pipnix` (unchanged) |
+| `ui.base_path` | `/smilir` (or empty at a subdomain root) | `/pipnix` (unchanged) |
+| Database | new database | existing `octavamy_pipnix`, prefix `pn_` |
+| Lock / cookie / env | `pipnix`, `pipnix_sid`, `PIPNIX_*` | identical (no migration) |
+| Cron | new path | existing line (no change) |
+| Updater | `qoisoctava/smilir` | `qoisoctava/smilir` |
 
-   ```bash
-   git remote add smilir git@github.com:qoisoctava/smilir.git
-   git push -u smilir HEAD:main
-   git tag -a v1.0.0 -m "smilir 1.0.0"
-   git push smilir v1.0.0
-   make dist   # dist/pipnix-v1.0.0.zip (name unchanged until stage 4)
-   gh release create v1.0.0 dist/pipnix-v1.0.0.zip --repo qoisoctava/smilir
-   ```
+Rules:
 
-3. Point the updater at the new repo in three places: `app/config.php`
-   (`updater.repo`), `app/config.example.php` default,
-   `app/src/Updater.php` fallback, plus `PIPNIX_UPDATE_REPO` for Docker.
-4. Verify: `php app/ops.php update:check` must report the new repo and the
-   `v1.0.0` tag. Then **Admin → Updates → Check now**.
-5. GitHub redirects the old `pipnix` repo name to the new one, so existing
-   remotes keep working; update badges and social preview afterwards.
+- **Never** run both profiles against the same database — two schedulers, two
+  locks, double runs. Coexisting installs need separate databases and different
+  `lock.name` / session names.
+- Profiles differ only in configuration, archive prefix and deployment kit.
+  Security fixes and features ship once and reach both.
+- The deployment profile **never** runs stage 3 or 4: paths, database, lock,
+  cookie and env stay exactly as they are.
+- Stage 3/4 (below) are opt-in and only for a fresh utama install. If the
+  internal names (`pn_`, `PN_*`, `PIPNIX_*`) are ever renamed, do it as a
+  one-time `2.0` with a migration script — not as a permanent second branch.
+- `make dist PREFIX=smilir` controls only the archive/root folder name; the
+  extracted deployment zip keeps `pipnix/`, matching `~/pipnix`.
 
-Rollback: set `updater.repo` back to `qoisoctava/pipnix`.
+## Stage 2 — repository and release (done)
 
-## Stage 3 — install path and `base_path`
+The repository was renamed to **`qoisoctava/smilir`** (GitHub redirects the
+old `qoisoctava/pipnix` URL). The local remote, updater defaults, Docker env
+default, docs and tests now point at the new slug.
+
+Existing installations keep working through the redirect, but should be
+updated once:
+
+```bash
+# config.php (or the Settings form / Admin → Updates)
+'updater' => ['repo' => 'qoisoctava/smilir', ...],
+
+# if the slug was saved in settings
+mysql -e "UPDATE pn_setting SET v='qoisoctava/smilir' WHERE k='updater.repo';"
+php app/ops.php update:check
+```
+
+Releases are cut from `main`:
+
+```bash
+git tag -a v1.0.0 -m "smilir 1.0.0" && git push origin v1.0.0
+make dist                              # deployment (pipnix-v1.0.0.zip)
+make dist PREFIX=smilir                # utama (smilir-v1.0.0.zip)
+gh release create v1.0.0 dist/pipnix-v1.0.0.zip dist/smilir-v1.0.0.zip \
+  --repo qoisoctava/smilir
+```
+
+Rollback: the old repository name still redirects; if needed, set
+`updater.repo` back to `qoisoctava/pipnix`.
+
+## Stage 3 — install path and `base_path` (utama only)
 
 Pre-flight: choose the names (`~/smilir`, `/smilir`). Keep the lock name
 `pipnix` for the whole transition — a different name would let the old and new
@@ -95,7 +128,7 @@ cron ticks run at the same time.
 
 Rollback: old folder and old cron are still intact until step 4.
 
-## Stage 4 — database and Docker identity
+## Stage 4 — database and Docker identity (utama only)
 
 Only when stage 1–3 are stable.
 

@@ -67,7 +67,7 @@ services:
       # Built-in updater: disabled in Docker by default — rebuild the image
       # (`docker compose build --pull && docker compose up -d`) instead.
       PIPNIX_UPDATER_ENABLED: ${PIPNIX_UPDATER_ENABLED:-1}
-      PIPNIX_UPDATE_REPO: ${PIPNIX_UPDATE_REPO:-qoisoctava/pipnix}
+      PIPNIX_UPDATE_REPO: ${PIPNIX_UPDATE_REPO:-qoisoctava/smilir}
       PIPNIX_UPDATE_CHANNEL: ${PIPNIX_UPDATE_CHANNEL:-branch}
       PIPNIX_UPDATE_BRANCH: ${PIPNIX_UPDATE_BRANCH:-main}
       PIPNIX_UPDATE_TOKEN: ${PIPNIX_UPDATE_TOKEN:-}

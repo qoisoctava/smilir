@@ -41,7 +41,7 @@ final class Updater
 
         return [
             'enabled'  => (bool) $pick('enabled', true),
-            'repo'     => (string) $pick('repo', 'qoisoctava/pipnix'),
+            'repo'     => (string) $pick('repo', 'qoisoctava/smilir'),
             'channel'  => (string) $pick('channel', 'branch'),
             'branch'   => (string) $pick('branch', 'main'),
             'token'    => (string) Env::cfg('updater.token', ''),
