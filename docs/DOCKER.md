@@ -157,6 +157,10 @@ Everything is read from environment variables on each boot; the entrypoint
 writes `app/config.php` (mode `0640`, owned by `www-data`). Do not edit that
 file inside the container — change `.env` and recreate the container.
 
+The display name is smilir, but the internal identifiers stay `pipnix` in both
+profiles: `PIPNIX_*` variables, the default database/volume names and the
+container paths. Renaming them is an opt-in migration (`docs/BRAND.md`).
+
 | Variable | Default | Meaning |
 | --- | --- | --- |
 | `PIPNIX_PORT` | `8080` | host port for the console |

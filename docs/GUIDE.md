@@ -27,6 +27,10 @@ library Python.
 
 ### cPanel
 
+> Panduan ini memakai profil **deployment**: folder `~/pipnix`, database yang
+> sudah ada, cron tidak berubah. Instalasi baru (profil **utama**) memakai
+> `~/smilir` dan database baru — kodenya sama, lihat `docs/BRAND.md`.
+
 1. Buat database dan user MySQL dari cPanel; beri user **ALL PRIVILEGES**.
 2. Upload dan ekstrak paket smilir ke `~/pipnix/`. Jangan taruh `app/`, DAG,
    jobs, logs, atau konfigurasi di webroot.

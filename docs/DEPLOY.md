@@ -3,6 +3,11 @@
 smilir targets exactly one cheap shared-hosting box: PHP 8.1+, one MySQL
 database, one Python venv, and one cron line. Budget ~20 minutes.
 
+> **Profile:** this document describes the **deployment** profile — `~/pipnix`,
+> the existing database, and no path or cron changes. A clean install
+> (**utama**) uses `~/smilir` and a new database; the code is identical. See
+> `docs/BRAND.md` for the profile table and the opt-in migration runbooks.
+
 ```
 /home/USER/
 ├── pipnix/                  ← the app (NEVER web-accessible)

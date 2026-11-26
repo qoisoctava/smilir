@@ -6,6 +6,11 @@ It downloads a source archive, backs up the files it replaces, installs them
 around your data, and runs the idempotent schema migrations. No git, shell or
 root access is needed on the host.
 
+Both profiles (**utama** and **deployment**) update from the same repository.
+The deployment profile keeps its paths, database, lock, cookie and cron; the
+updater never touches `app/config.php`, `.env`, `dags/`, `jobs/`, `logs/` or
+`storage/`.
+
 ## Channels
 
 | Channel | Source | When to use |

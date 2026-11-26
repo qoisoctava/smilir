@@ -35,6 +35,7 @@
 - [Quick Start](#quick-start)
 - [Run with Docker](#run-with-docker)
 - [Deploy to cPanel](#deploy-to-cpanel)
+- [Deployment profiles](#deployment-profiles)
 - [DAG Format](#dag-format)
 - [Web Console](#web-console)
 - [CLI Reference](#cli-reference)
@@ -137,7 +138,24 @@ make dist                                        # deployment: dist/pipnix-v1.0.
 make dist PREFIX=smilir                          # clean install: dist/smilir-v1.0.0.zip
 ```
 
-Then in cPanel:
+### Deployment profiles
+
+One codebase, two install profiles — the archive prefix and config decide, not
+a fork:
+
+| | **Utama** (clean install) | **Deployment** (existing cPanel) |
+| --- | --- | --- |
+| Build | `make dist PREFIX=smilir` | `make dist` |
+| Install dir | `~/smilir/` | `~/pipnix/` |
+| `ui.base_path` | `/smilir` | `/pipnix` |
+| Database | new | existing, prefix `pn_` |
+| Lock / cookie / cron | `pipnix` | unchanged |
+
+The deployment profile never changes paths, database, lock, session cookie or
+cron. Full policy, rollback and the repo/path/Docker runbooks:
+[docs/BRAND.md](docs/BRAND.md).
+
+Then in cPanel (deployment profile):
 
 1. **Upload & extract** the zip to `/home/USER/` (File Manager)
 2. Copy the contents of `pipnix/public/` into `public_html/pipnix/` — everything else stays in `~/pipnix/`, outside the web root. The front controller auto-detects `~/pipnix/app`; override with the `PIPNIX_APP` env var if needed.
